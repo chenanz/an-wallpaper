@@ -1,0 +1,126 @@
+[06-30 14:35:20] === 官方立绘爬虫启动 | 已有 167 张 | 本轮目标 +10 ===
+[06-30 14:35:20]   >>> [米哈游本地缓存] scanning...
+[06-30 14:35:20]     INFO No local cache assets found (normal)
+[06-30 14:35:20]   >>> [原神] genshin.jmp.blue fetching...
+[06-30 14:35:20]     >> 雷电将军 already exists, skip
+[06-30 14:35:20]     >> 胡桃 already exists, skip
+[06-30 14:35:20]     >> 纳西妲 already exists, skip
+[06-30 14:35:20]     >> 芙宁娜 already exists, skip
+[06-30 14:35:20]     >> 甘雨 already exists, skip
+[06-30 14:35:20]     >> 宵宫 already exists, skip
+[06-30 14:35:20]     >> 绫华 already exists, skip
+[06-30 14:35:20]     >> 八重神子 already exists, skip
+[06-30 14:35:20]     >> 妮露 already exists, skip
+[06-30 14:35:20]     >> 心海 already exists, skip
+[06-30 14:35:20]     >> 优菈 already exists, skip
+[06-30 14:35:20]     >> 申鹤 already exists, skip
+[06-30 14:35:20]     >> 夜兰 already exists, skip
+[06-30 14:35:20]     >> 迪希雅 already exists, skip
+[06-30 14:35:20]     >> 千织 already exists, skip
+[06-30 14:35:20]     >> 娜维娅 already exists, skip
+[06-30 14:35:20]     >> 克洛琳德 already exists, skip
+[06-30 14:35:22]     ERR [久岐忍] gacha-splash failed: 404 Client Error: Not Found for url: https://genshin.jmp.blue/characters/shinobu
+[06-30 14:35:22]     OK [阿蕾奇诺] portrait (60KB) [+1/10]
+[06-30 14:35:26]     >> 玛薇卡 already exists, skip
+[06-30 14:35:28]     OK [莫娜] portrait (190KB) [+2/10]
+[06-30 14:35:32]     OK [刻晴] portrait (161KB) [+3/10]
+[06-30 14:35:37]     OK [可莉] portrait (241KB) [+4/10]
+[06-30 14:35:42]     OK [琴] portrait (143KB) [+5/10]
+[06-30 14:35:47]     OK [凝光] portrait (190KB) [+6/10]
+[06-30 14:35:53]     OK [北斗] portrait (276KB) [+7/10]
+[06-30 14:36:05]     OK [烟绯] portrait (276KB) [+8/10]
+[06-30 14:36:09]     OK [云堇] portrait (183KB) [+9/10]
+[06-30 14:36:14]     OK [珐露珊] portrait (215KB) [+10/10]
+[06-30 14:36:19] === 本轮完成 | 新增 10 张 | 总计 177 张 ===
+[06-30 14:36:19] 新增分布: 原神:10
+[06-30 14:36:19] sync_official.py 完成!
+[06-30 14:36:32] === 官方立绘爬虫启动 | 已有 177 张 | 本轮目标 +8 ===
+[06-30 14:36:32]   >>> [米哈游本地缓存] scanning...
+[06-30 14:36:32]     INFO No local cache assets found (normal)
+[06-30 14:36:32]   >>> [原神] genshin.jmp.blue fetching...
+[06-30 14:36:32]     >> 雷电将军 already exists, skip
+[06-30 14:36:32]     >> 胡桃 already exists, skip
+[06-30 14:36:32]     >> 纳西妲 already exists, skip
+[06-30 14:36:32]     >> 芙宁娜 already exists, skip
+[06-30 14:36:32]     >> 甘雨 already exists, skip
+[06-30 14:36:32]     >> 宵宫 already exists, skip
+[06-30 14:36:32]     >> 绫华 already exists, skip
+[06-30 14:36:32]     >> 八重神子 already exists, skip
+[06-30 14:36:32]     >> 妮露 already exists, skip
+[06-30 14:36:32]     >> 心海 already exists, skip
+[06-30 14:36:32]     >> 优菈 already exists, skip
+[06-30 14:36:32]     >> 申鹤 already exists, skip
+[06-30 14:36:32]     >> 夜兰 already exists, skip
+[06-30 14:36:32]     >> 迪希雅 already exists, skip
+[06-30 14:36:32]     >> 千织 already exists, skip
+[06-30 14:36:32]     >> 娜维娅 already exists, skip
+[06-30 14:36:32]     >> 克洛琳德 already exists, skip
+[06-30 14:36:33]     ERR [久岐忍] gacha-splash failed: 404 Client Error: Not Found for url: https://genshin.jmp.blue/characters/shinobu
+[06-30 14:36:33]     >> 阿蕾奇诺 already exists, skip
+[06-30 14:36:33]     >> 玛薇卡 already exists, skip
+[06-30 14:36:33]     >> 莫娜 already exists, skip
+[06-30 14:36:33]     >> 刻晴 already exists, skip
+[06-30 14:36:33]     >> 可莉 already exists, skip
+[06-30 14:36:33]     >> 琴 already exists, skip
+[06-30 14:36:33]     >> 凝光 already exists, skip
+[06-30 14:36:33]     >> 北斗 already exists, skip
+[06-30 14:36:33]     >> 烟绯 already exists, skip
+[06-30 14:36:33]     >> 云堇 already exists, skip
+[06-30 14:36:33]     >> 珐露珊 already exists, skip
+[06-30 14:36:33]     >> 夏洛蒂 already exists, skip
+[06-30 14:36:35]     OK [菲谢尔] portrait (183KB) [+1/8]
+[06-30 14:36:37]   >>> [明日方舟] prts.wiki fetching...
+[06-30 14:36:38]     WARN [迷迭香] no image URL
+[06-30 14:36:38]     WARN [凯尔希] no image URL
+[06-30 14:36:39]     WARN [史尔特尔] no image URL
+[06-30 14:36:39]     WARN [陈] no image URL
+[06-30 14:36:39]     WARN [能天使] no image URL
+[06-30 14:36:39]     WARN [W] no image URL
+[06-30 14:36:40]     WARN [推进之王] no image URL
+[06-30 14:36:40]     WARN [艾雅法拉] no image URL
+[06-30 14:36:40]     WARN [伊芙利特] no image URL
+[06-30 14:36:40]     WARN [星熊] no image URL
+[06-30 14:36:40]     WARN [塞雷娅] no image URL
+[06-30 14:36:41]     WARN [闪灵] no image URL
+[06-30 14:36:41]     WARN [夜莺] no image URL
+[06-30 14:36:41]     WARN [澄闪] no image URL
+[06-30 14:36:41]     WARN [夕] no image URL
+[06-30 14:36:41]     WARN [令] no image URL
+[06-30 14:36:42]     WARN [铃兰] no image URL
+[06-30 14:36:42]     WARN [傀影] no image URL
+[06-30 14:36:42]     WARN [温蒂] no image URL
+[06-30 14:36:42]     WARN [风笛] no image URL
+[06-30 14:36:42]     WARN [棘刺] no image URL
+[06-30 14:36:43]     WARN [银灰] no image URL
+[06-30 14:36:43]     WARN [焰尾] no image URL
+[06-30 14:36:43]     WARN [远牙] no image URL
+[06-30 14:36:43]     WARN [空弦] no image URL
+[06-30 14:36:43]     WARN [嵯峨] no image URL
+[06-30 14:36:44]     WARN [水月] no image URL
+[06-30 14:36:44]     WARN [玛恩纳] no image URL
+[06-30 14:36:44]     WARN [灰喉] no image URL
+[06-30 14:36:44]     WARN [赫德] no images on page
+[06-30 14:36:44]   >>> [蔚蓝档案] schaledb.com fetching...
+[06-30 14:36:46]     ERR [阿露] download failed: too_small
+[06-30 14:36:46]     >> 日奈 already exists, skip
+[06-30 14:36:49]     ERR [伊织] download failed: too_small
+[06-30 14:36:51]     ERR [晴奈] download failed: too_small
+[06-30 14:36:53]     ERR [六花] download failed: too_small
+[06-30 14:36:55]     ERR [诺诺美] download failed: too_small
+[06-30 14:36:57]     ERR [白子] download failed: too_small
+[06-30 14:36:59]     ERR [芹香] download failed: too_small
+[06-30 14:37:03]     ERR [星野] download failed: too_small
+[06-30 14:37:06]     ERR [椿] download failed: too_small
+[06-30 14:37:08]     ERR [泉奈] download failed: too_small
+[06-30 14:37:12]     ERR [宫子] download failed: too_small
+[06-30 14:37:14]     ERR [花子] download failed: too_small
+[06-30 14:37:17]     ERR [亚子] download failed: too_small
+[06-30 14:37:18]     ERR [柚子] download failed: too_small
+[06-30 14:37:20]     ERR [翠] download failed: too_small
+[06-30 14:37:22]     ERR [莲见] download failed: too_small
+[06-30 14:37:25]     ERR [小春] download failed: too_small
+[06-30 14:37:27]     ERR [咲] download failed: too_small
+[06-30 14:37:29]     ERR [妃叶] download failed: too_small
+[06-30 14:37:29] === 本轮完成 | 新增 1 张 | 总计 178 张 ===
+[06-30 14:37:29] 新增分布: 原神:1
+[06-30 14:37:29] sync_official.py 完成!

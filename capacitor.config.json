@@ -1,0 +1,23 @@
+{
+  "appId": "com.an.wallpaper",
+  "appName": "安",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#0b0a14"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#0b0a14"
+    },
+    "StatusBar": {
+      "backgroundColor": "#0b0a14",
+      "style": "DARK"
+    }
+  }
+}
