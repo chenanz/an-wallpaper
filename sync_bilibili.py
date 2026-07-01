@@ -19,6 +19,17 @@ from pathlib import Path
 from datetime import datetime
 from io import BytesIO
 
+# 自动定位到项目根目录（无论从哪里运行）
+_SCRIPT_DIR = Path(__file__).resolve().parent
+if (_SCRIPT_DIR / "src" / "data.js").exists():
+    PROJECT_ROOT = str(_SCRIPT_DIR)
+elif (_SCRIPT_DIR.parent / "an-app" / "src" / "data.js").exists():
+    PROJECT_ROOT = str(_SCRIPT_DIR.parent / "an-app")
+else:
+    # 兜底：硬编码
+    PROJECT_ROOT = r"D:\风\hermes\an-app"
+os.chdir(PROJECT_ROOT)
+
 DOWNLOAD_DIR = "public/images"
 DATA_JS_PATH = "src/data.js"
 LOG_PATH = "public/images/.crawl_log.txt"
@@ -221,9 +232,26 @@ def read_data_js():
     try:
         with open(DATA_JS_PATH, "r", encoding="utf-8") as f:
             content = f.read()
-        m = re.search(r'export const wallpaperData = (\[.*?\]);', content, re.DOTALL)
-        if m:
-            return json.loads(m.group(1))
+        # 找到最后一个 ; 之前的 ]，即数组结尾
+        # 先定位 "export const wallpaperData = " 的起始位置
+        marker = "export const wallpaperData = "
+        start = content.find(marker)
+        if start < 0:
+            return []
+        start += len(marker)
+        # 从 start 位置找到匹配括号的结束
+        depth = 0
+        end = start
+        for i in range(start, len(content)):
+            if content[i] == '[':
+                depth += 1
+            elif content[i] == ']':
+                depth -= 1
+                if depth == 0:
+                    end = i + 1
+                    break
+        arr_text = content[start:end]
+        return json.loads(arr_text)
     except Exception as e:
         log(f"读取 data.js 失败: {e}")
     return []
@@ -263,18 +291,58 @@ def get_games_list():
     ]
 
 
+def read_games_js():
+    """读取现有 data.js 中的 GAMES 列表"""
+    if not os.path.exists(DATA_JS_PATH):
+        return []
+    try:
+        with open(DATA_JS_PATH, "r", encoding="utf-8") as f:
+            content = f.read()
+        marker = "export const GAMES = "
+        start = content.find(marker)
+        if start < 0:
+            return []
+        start += len(marker)
+        depth = 0
+        end = start
+        for i in range(start, len(content)):
+            if content[i] == '[':
+                depth += 1
+            elif content[i] == ']':
+                depth -= 1
+                if depth == 0:
+                    end = i + 1
+                    break
+        return json.loads(content[start:end])
+    except:
+        return []
+
+
 def write_data_js(items):
-    # 统计已有的游戏
-    existing_games = set(it["game"] for it in items)
-    games_list = [g for g in get_games_list() if g["name"] in existing_games]
-    # 补不在预设列表里的
-    for g in existing_games:
-        if g not in [x["name"] for x in games_list]:
-            games_list.append({"id": g.lower().replace(" ", ""), "name": g})
+    # 优先从现有 data.js 读取 GAMES 列表，保留已有的（如足社）
+    existing_games_list = read_games_js()
+    existing_game_names = set(g["name"] for g in existing_games_list)
+    
+    # 统计 items 中出现的游戏
+    items_game_names = set(it["game"] for it in items)
+    
+    # 把 items 中有但 GAMES 列表里没有的游戏补上
+    preset = get_games_list()
+    for g in preset:
+        if g["name"] in items_game_names and g["name"] not in existing_game_names:
+            existing_games_list.append(g)
+            existing_game_names.add(g["name"])
+    # 不在预设列表里的也补上
+    for gname in items_game_names:
+        if gname not in existing_game_names:
+            existing_games_list.append({"id": gname.lower().replace(" ", ""), "name": gname})
+            existing_game_names.add(gname)
+    
+    # 保留不在 items 中的已有游戏（如足社）
+    games_list = existing_games_list
 
     with open(DATA_JS_PATH, "w", encoding="utf-8") as f:
-        f.write("// 自动生成：python sync_bilibili.py / sync_auto.py\n")
-        f.write("// 多源自动爬虫（米游社 + B站）\n\n")
+        f.write("// 自动生成：多源爬虫（米游社 + B站 + 百度图 + 官方 + 足社爬虫v3）\n\n")
         f.write("export const GAMES = ")
         json.dump(games_list, f, ensure_ascii=False, indent=2)
         f.write(";\n\n")

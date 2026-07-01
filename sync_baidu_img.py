@@ -211,7 +211,7 @@ def read_data_js():
     try:
         with open(DATA_JS_PATH, "r", encoding="utf-8") as f:
             content = f.read()
-        m = re.search(r'export const wallpaperData = (\[.*?\]);', content, re.DOTALL)
+        m = re.search(r'export const wallpaperData = (\[.*\])\s*\r?\n', content, re.DOTALL)
         if m:
             return json.loads(m.group(1))
     except Exception as e:
@@ -260,7 +260,7 @@ def write_data_js(items):
             games_list.append({"id": g.lower().replace(" ", ""), "name": g})
 
     with open(DATA_JS_PATH, "w", encoding="utf-8") as f:
-        f.write("// 自动生成：多源爬虫（米游社 + B站 + 百度图 + 官方）\n\n")
+        f.write("// 自动生成：多源爬虫（米游社 + B站 + 百度图 + 官方 + 足社爬虫v3）\n\n")
         f.write("export const GAMES = ")
         json.dump(games_list, f, ensure_ascii=False, indent=2)
         f.write(";\n\n")
