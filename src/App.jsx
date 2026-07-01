@@ -83,17 +83,20 @@ function TabBtn({ label, icon, active, onClick }) {
 }
 
 function searchWallpapers(data, query) {
-  if (!query || query.trim() === '') return data.filter(i => i.gender === '女');
+  let base = data.filter(i => i.gender === '女' && i.game !== '足社');
+  if (!query || query.trim() === '') return base;
   const q = query.toLowerCase().trim();
   if (['男','male','boy','man','guy'].includes(q)) return [];
-  return data.filter(item =>
-    item.gender === '女' && (
-      item.title.toLowerCase().includes(q) ||
-      item.characterName.toLowerCase().includes(q) ||
-      item.game.toLowerCase().includes(q) ||
-      item.style.toLowerCase().includes(q) ||
-      item.tags.some(t => t.toLowerCase().includes(q))
-    )
+  // 搜索时才允许搜到足社内容（用户主动搜时才显示）
+  if (q.includes('足社') || q.includes('足') || q.includes('裸足') || q.includes('黑丝') || q.includes('白丝') || q.includes('连裤袜') || q.includes('过膝袜')) {
+    base = data.filter(i => i.gender === '女');
+  }
+  return base.filter(item =>
+    item.title.toLowerCase().includes(q) ||
+    item.characterName.toLowerCase().includes(q) ||
+    item.game.toLowerCase().includes(q) ||
+    item.style.toLowerCase().includes(q) ||
+    item.tags.some(t => t.toLowerCase().includes(q))
   );
 }
 

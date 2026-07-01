@@ -191,7 +191,7 @@ def read_data_js():
     try:
         with open(DATA_JS_PATH, "r", encoding="utf-8") as f:
             content = f.read()
-        m = re.search(r'export const wallpaperData = (\[.*?\]);', content, re.DOTALL)
+        m = re.search(r'export const wallpaperData = (\[.*\])\s*\r?\n', content, re.DOTALL)
         if m:
             return json.loads(m.group(1))
     except Exception as e:
