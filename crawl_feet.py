@@ -53,23 +53,24 @@ SKIP_TAGS = set([
 
 # ── Safebooru 搜索配置 ─────────────────────────
 # (tag_query, tag_for_metadata, display_keyword)
+# 注意: 使用空格分隔tag（requests params编码+为%2B会失败）
 SAFEBOORU_QUERIES = [
-    ("foot_focus+1girl",                    "foot_focus",  "足特写"),
-    ("feet+1girl",                          "feet",        "足"),
-    ("barefoot+1girl",                      "barefoot",    "裸足"),
-    ("soles+1girl",                         "soles",       "足底"),
-    ("toes+1girl",                          "toes",        "脚趾"),
-    ("stockings+1girl",                      "stockings",   "丝袜"),
-    ("thighhighs+1girl",                     "thighhighs",  "过膝袜"),
-    ("pantyhose+1girl",                      "pantyhose",   "连裤袜"),
-    ("bare_legs+1girl",                     "bare_legs",   "裸腿"),
-    ("legs+1girl",                          "legs",        "美腿"),
-    ("footwear_focus+1girl",                 "footwear_focus", "足装"),
-    ("black_thighhighs+1girl",              "black_thighhighs", "黑丝"),
-    ("white_thighhighs+1girl",              "white_thighhighs", "白丝"),
-    ("ankle_boots+1girl",                   "ankle_boots", "踝靴"),
-    ("kneesocks+1girl",                     "kneesocks",   "膝袜"),
-    ("striped_thighhighs+1girl",            "striped_thighhighs", "条纹袜"),
+    ("foot_focus 1girl",                    "foot_focus",  "足特写"),
+    ("feet 1girl",                          "feet",        "足"),
+    ("barefoot 1girl",                      "barefoot",    "裸足"),
+    ("soles 1girl",                         "soles",       "足底"),
+    ("toes 1girl",                          "toes",        "脚趾"),
+    ("stockings 1girl",                      "stockings",   "丝袜"),
+    ("thighhighs 1girl",                     "thighhighs",  "过膝袜"),
+    ("pantyhose 1girl",                      "pantyhose",   "连裤袜"),
+    ("bare_legs 1girl",                     "bare_legs",   "裸腿"),
+    ("legs 1girl",                          "legs",        "美腿"),
+    ("footwear_focus 1girl",                 "footwear_focus", "足装"),
+    ("black_thighhighs 1girl",              "black_thighhighs", "黑丝"),
+    ("white_thighhighs 1girl",              "white_thighhighs", "白丝"),
+    ("ankle_boots 1girl",                   "ankle_boots", "踝靴"),
+    ("kneesocks 1girl",                     "kneesocks",   "膝袜"),
+    ("striped_thighhighs 1girl",            "striped_thighhighs", "条纹袜"),
 ]
 
 # ── Zerochan 搜索配置 ─────────────────────────
@@ -213,7 +214,7 @@ def crawl_safebooru(seen_hashes):
                     "s": "post",
                     "q": "index",
                     "json": "1",
-                    "tags": tag_query,
+                    "tags": tag_query,  # 用空格分隔，requests编码+为%2B会失败
                     "limit": str(SAFEBOORU_PAGE_SIZE),
                     "pid": str(pid),
                 }
@@ -333,7 +334,7 @@ def crawl_zerochan(seen_hashes):
                 url = f"https://www.zerochan.net/{tag}?json=1&p={page}"
                 resp = session.get(url, timeout=20, headers={
                     "User-Agent": get_ua(),
-                    "Accept": "application/json",
+                    "Accept": "application/json",  # 必须加此header，否则返回HTML
                     "Referer": "https://www.zerochan.net/",
                 })
                 if resp.status_code != 200:
@@ -697,90 +698,98 @@ def process_candidates(all_candidates, seen_hashes, existing_items, max_id):
     fetched = 0
     failed = 0
     next_id = max_id + 1
+    seen_local = set(seen_hashes)  # 本地副本，线程安全
     
     log(f"  开始下载 {len(all_candidates)} 个候选图片，并发={MAX_CONCURRENT_DOWNLOADS}")
     
-    with ThreadPoolExecutor(max_workers=MAX_CONCURRENT_DOWNLOADS) as executor:
-        futures = {}
-        for i, cand in enumerate(all_candidates):
-            if fetched >= TARGET_COUNT:
-                break
-            future = executor.submit(download_and_save, cand, seen_hashes)
-            futures[future] = (i, cand)
+    # 分批提交，每批不超过MAX_CONCURRENT_DOWNLOADS
+    batch_size = MAX_CONCURRENT_DOWNLOADS * 2
+    for batch_start in range(0, len(all_candidates), batch_size):
+        if fetched >= TARGET_COUNT:
+            break
         
-        for future in as_completed(futures):
-            if fetched >= TARGET_COUNT:
-                break
+        batch = all_candidates[batch_start:batch_start + batch_size]
+        
+        with ThreadPoolExecutor(max_workers=MAX_CONCURRENT_DOWNLOADS) as executor:
+            futures = {}
+            for i, cand in enumerate(batch):
+                future = executor.submit(download_and_save, cand, seen_local)
+                futures[future] = (batch_start + i, cand)
             
-            idx, cand = futures[future]
-            try:
-                ok, result = future.result()
-                if not ok or result is None:
+            for future in as_completed(futures):
+                if fetched >= TARGET_COUNT:
+                    break
+                
+                idx, cand = futures[future]
+                try:
+                    ok, result = future.result()
+                    if not ok or result is None:
+                        failed += 1
+                        continue
+                    
+                    cand = result["candidate"]
+                    filename = result["filename"]
+                    w, h = result["width"], result["height"]
+                    size = result["size"]
+                    
+                    is_portrait = (h > w) if w > 0 else True
+                    
+                    char_name = cand["char_name"] or "精选角色"
+                    keyword = cand["keyword"]
+                    key_tag = cand["key_tag"]
+                    extra_tags = cand.get("extra_tags", [])
+                    source = cand["source"]
+                    
+                    # 构建title
+                    title = f"{char_name}·{keyword}"
+                    if len(title) > 55:
+                        title = title[:55]
+                    
+                    # 构建tags
+                    tags = [char_name]
+                    if keyword and keyword not in tags:
+                        tags.append(keyword)
+                    for et in extra_tags:
+                        if et and et not in tags:
+                            tags.append(et)
+                    if "足社" not in tags:
+                        tags.append("足社")
+                    # 确保足相关关键词
+                    feet_keywords = ["足", "脚", "腿", "foot", "leg", "feet", "stocking",
+                                    "pantyhose", "裸足", "丝袜", "玉足", "脚趾", "美腿",
+                                    "长腿", "黑丝", "白丝", "过膝袜", "thigh", "soles",
+                                    "踝", "连裤袜", "足底"]
+                    if not any(k in " ".join(tags).lower() for k in feet_keywords):
+                        tags.append(key_tag.replace("_", " "))
+                    tags = tags[:6]
+                    
+                    item = {
+                        "id": next_id,
+                        "title": title,
+                        "characterName": char_name,
+                        "game": "足社",
+                        "gender": "女",
+                        "style": "二次元",
+                        "tags": tags,
+                        "likes": 0,
+                        "rarity": "SSR",
+                        "source": source,
+                        "nsfw": False,
+                        "imageFile": filename,
+                    }
+                    new_items.append(item)
+                    next_id += 1
+                    fetched += 1
+                    
+                    orientation = "竖" if is_portrait else "横"
+                    log(f"    ✓ [{orientation}] {title} ({size//1024}KB) [{source}] [+{fetched}/{TARGET_COUNT}]")
+                    
+                except Exception as e:
                     failed += 1
-                    continue
-                
-                cand = result["candidate"]
-                filename = result["filename"]
-                w, h = result["width"], result["height"]
-                size = result["size"]
-                
-                is_portrait = (h > w) if w > 0 else True
-                
-                char_name = cand["char_name"] or "精选角色"
-                keyword = cand["keyword"]
-                key_tag = cand["key_tag"]
-                extra_tags = cand.get("extra_tags", [])
-                source = cand["source"]
-                
-                # 构建title
-                title = f"{char_name}·{keyword}"
-                if len(title) > 55:
-                    title = title[:55]
-                
-                # 构建tags
-                tags = [char_name]
-                if keyword and keyword not in tags:
-                    tags.append(keyword)
-                for et in extra_tags:
-                    if et and et not in tags:
-                        tags.append(et)
-                if "足社" not in tags:
-                    tags.append("足社")
-                # 确保足相关关键词
-                feet_keywords = ["足", "脚", "腿", "foot", "leg", "feet", "stocking",
-                                "pantyhose", "裸足", "丝袜", "玉足", "脚趾", "美腿",
-                                "长腿", "黑丝", "白丝", "过膝袜", "thigh", "soles",
-                                "踝", "连裤袜", "足底"]
-                if not any(k in " ".join(tags).lower() for k in feet_keywords):
-                    tags.append(key_tag.replace("_", " "))
-                tags = tags[:6]
-                
-                item = {
-                    "id": next_id,
-                    "title": title,
-                    "characterName": char_name,
-                    "game": "足社",
-                    "gender": "女",
-                    "style": "二次元",
-                    "tags": tags,
-                    "likes": 0,
-                    "rarity": "SSR",
-                    "source": source,
-                    "nsfw": False,
-                    "imageFile": filename,
-                }
-                new_items.append(item)
-                next_id += 1
-                fetched += 1
-                
-                orientation = "竖" if is_portrait else "横"
-                log(f"    ✓ [{orientation}] {title} ({size//1024}KB) [{source}] [+{fetched}/{TARGET_COUNT}]")
-                
-            except Exception as e:
-                failed += 1
-                log(f"    ✗ 下载失败 #{idx}: {e}")
     
     log(f"  下载完成: 成功={fetched}, 失败={failed}")
+    # 同步hash集合
+    seen_hashes.update(seen_local)
     return new_items
 
 
