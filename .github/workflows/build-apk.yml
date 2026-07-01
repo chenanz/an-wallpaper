@@ -33,11 +33,25 @@ jobs:
       - name: Install npm deps
         run: npm install --legacy-peer-deps
 
-      - name: Sync Capacitor Android
-        run: npx cap sync android
-
       - name: Build Web
         run: npm run build
+
+      - name: Deploy dist to Pages (main branch)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: main
+          force_orphan: true
+
+      - name: Strip images for APK build (images served via Pages CDN)
+        run: |
+          du -sh dist/images/
+          rm -rf dist/images/
+          echo "dist/images/ stripped for APK build"
+
+      - name: Sync Capacitor Android (without images)
+        run: npx cap sync android
 
       - name: Build Android APK
         run: |
@@ -60,11 +74,3 @@ jobs:
           fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Deploy dist to Pages (main branch)
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          publish_branch: main
-          force_orphan: true
