@@ -1,46 +1,32 @@
-#!/usr/bin/env python3
-"""检查 GitHub 仓库上传状态"""
-import requests, os, sys
+import re, os
+from collections import Counter
 
-TOKEN = os.environ.get("GHTOKEN", "")
-if not TOKEN:
-    tok_file = "D:/风/hermes/an-app/.gh_token"
-    if os.path.exists(tok_file):
-        with open(tok_file, "r") as f:
-            TOKEN = f.read().strip()
-if not TOKEN:
-    print("No token"); sys.exit(1)
+data = open('src/data.js', 'r', encoding='utf-8').read()
 
-HEADERS = {
-    "Authorization": "token " + TOKEN,
-    "Accept": "application/vnd.github+json",
-}
+# Get all imageFile values
+imageFiles = re.findall(r'"imageFile":\s*"(.+?)"', data)
+local = set(os.listdir('public/images'))
 
-OWNER = "chenanz"
-REPO = "an-wallpaper"
+missing = [f for f in imageFiles if f not in local]
+print(f'Total entries: {len(imageFiles)}')
+print(f'Local images: {len(local)}')
+print(f'Missing images: {len(missing)}')
+print(f'Present: {len(imageFiles) - len(missing)}')
 
-# images
-r = requests.get(f'https://api.github.com/repos/{OWNER}/{REPO}/contents/images', headers=HEADERS, timeout=30)
-if r.status_code == 200:
-    items = r.json()
-    uploaded = [x["name"] for x in items if x["type"] == "file"]
-    print(f'images/ 已上传 {len(uploaded)} 张')
-    local = [f for f in os.listdir("D:/风/hermes/an-app/dist/images") if f.endswith(".jpg")]
-    print(f'dist/images/ 共 {len(local)} 张')
-    missing = set(local) - set(uploaded)
-    print(f'还缺 {len(missing)} 张')
-else:
-    print(f'images/ status={r.status_code}')
+# Check game/category distribution
+games = re.findall(r'"game":\s*"(.+?)"', data)
+sources = re.findall(r'"source":\s*"(.+?)"', data)
+print(f'\nGames: {dict(Counter(games))}')
+print(f'Sources: {dict(Counter(sources))}')
 
-# assets
-r2 = requests.get(f'https://api.github.com/repos/{OWNER}/{REPO}/contents/assets', headers=HEADERS, timeout=30)
-if r2.status_code == 200:
-    print(f'assets/ 已上传 {len(r2.json())} 个文件')
+# Count missing per source
+all_entries = re.findall(r'"id":\s*(\d+).*?"imageFile":\s*"(.+?)".*?"game":\s*"(.+?)".*?"source":\s*"(.+?)"', data, re.DOTALL)
 
-# Pages
-r3 = requests.get(f'https://api.github.com/repos/{OWNER}/{REPO}/pages', headers=HEADERS, timeout=30)
-if r3.status_code == 200:
-    d = r3.json()
-    print(f'\nPages: {d.get("html_url","?")} status={d.get("status","?")}')
-else:
-    print(f'\nPages: not enabled ({r3.status_code})')
+# Find yuzu/足 entries
+yuzu_lines = []
+for line in data.split('\n'):
+    if '足' in line or '黑丝' in line or '白丝' in line or '裸足' in line or '美腿' in line or '丝袜' in line:
+        yuzu_lines.append(line.strip())
+print(f'\n**社 related lines: {len(yuzu_lines)}')
+for l in yuzu_lines[:10]:
+    print(f'  {l[:100]}')
