@@ -1,0 +1,67 @@
+[07-01 10:56:04][足社] === 足社爬虫启动 | 已有 165 张 | 目标 +70 ===
+[07-01 10:56:04][足社]   已有hash: 170 个 (文件级) + 0 个 (URL级)
+[07-01 10:56:04][足社] ── 阶段1: 收集 Safebooru 候选 ──
+[07-01 10:56:06][足社]   Safebooru [foot_focus+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:06][足社]   Safebooru [feet+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:07][足社]   Safebooru [barefoot+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:08][足社]   Safebooru [soles+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:09][足社]   Safebooru [toes+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:09][足社]   Safebooru [stockings+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:11][足社]   Safebooru [thighhighs+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:12][足社]   Safebooru [pantyhose+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:13][足社]   Safebooru [bare_legs+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:14][足社]   Safebooru [legs+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:16][足社]   Safebooru [footwear_focus+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:17][足社]   Safebooru [black_thighhighs+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:18][足社]   Safebooru [white_thighhighs+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:19][足社]   Safebooru [ankle_boots+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:19][足社]   Safebooru [kneesocks+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:20][足社]   Safebooru [striped_thighhighs+1girl] pid=0 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:20][足社]   Safebooru: 0 个候选
+[07-01 10:56:20][足社] ── 阶段2: 收集 Zerochan 候选 ──
+[07-01 10:56:21][足社]   Zerochan [Feet,Anime] p=1 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:22][足社]   Zerochan [Pantyhose,Anime] p=1 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:23][足社]   Zerochan [Thigh+Highs,Anime] p=1 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:23][足社]   Zerochan [Bare+Legs,Anime] p=1 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:24][足社]   Zerochan [Anklet,Anime] p=1 失败: Expecting value: line 1 column 1 (char 0)
+[07-01 10:56:24][足社]   Zerochan: 0 个候选
+[07-01 10:56:24][足社] ── 阶段3: 收集 Bing CN 候选 ──
+[07-01 10:56:24][足社]   Bing [anime feet wallpaper 1080p] page=0: 70 urls, 累计 70
+[07-01 10:56:26][足社]   Bing CN: 70 个候选
+[07-01 10:56:26][足社] ── 总候选: 70 个 ──
+[07-01 10:56:26][足社] ── 阶段4: 并发下载图片 ──
+[07-01 10:56:26][足社]   开始下载 70 个候选图片，并发=3
+[07-01 10:56:26][足社]   下载完成: 成功=0, 失败=70
+[07-01 10:56:26][足社] ⚠️ 未获取任何新图片
+[07-01 10:56:26][足社] === 足社爬虫结束 | 新增 0 张 ===
+[07-01 11:38:15][足社] === 足社爬虫v2 ===
+[07-01 11:38:15][足社]   现有: 总165, 足社60, 其他105
+[07-01 11:38:15][足社]   目标: 足社+140, 其他+95
+[07-01 11:38:15][足社] ── 收集足社候选 ──
+[07-01 11:38:17][足社]   足社[foot_focus] pid=0: 100post, 累计81
+[07-01 11:38:18][足社]   足社[foot_focus] pid=1: 100post, 累计161
+[07-01 11:38:20][足社]   足社[foot_focus] pid=2: 100post, 累计237
+[07-01 11:38:21][足社]   足社[foot_focus] pid=3: 68post, 累计287
+[07-01 11:38:22][足社]   足社候选: 287
+[07-01 11:38:22][足社] ── 收集其他分类候选 ──
+[07-01 11:38:23][足社]   其他[genshin_impact] pid=0: 100post, 累计39
+[07-01 11:38:25][足社]   其他[genshin_impact] pid=1: 100post, 累计70
+[07-01 11:38:26][足社]   其他[genshin_impact] pid=2: 100post, 累计111
+[07-01 11:38:28][足社]   其他[genshin_impact] pid=3: 100post, 累计144
+[07-01 11:38:31][足社]   其他[genshin_impact] pid=4: 100post, 累计200
+[07-01 11:38:31][足社]   其他候选: 200
+[07-01 11:38:31][足社] ── 下载足社图片 ──
+[07-01 11:38:31][足社]   下载: 成功=0, 失败=287
+[07-01 11:38:31][足社] ── 下载其他分类图片 ──
+[07-01 11:38:31][足社]   下载: 成功=0, 失败=200
+[07-01 11:38:31][足社] ── 重建 data.js ──
+[07-01 11:38:31][足社] 
+==================================================
+[07-01 11:38:31][足社] === 最终统计 ===
+[07-01 11:38:31][足社]   总条目: 165
+[07-01 11:38:31][足社]   足社: 60, 其他: 105
+[07-01 11:38:31][足社]   分游戏: {'原神': 61, '崩坏：星穹铁道': 32, '绝区零': 6, '明日方舟': 5, '蔚蓝档案': 1, '足社': 60}
+[07-01 11:38:31][足社]   足社角色(10): 伊吕波, 凝光, 安洁莉娜, 早柚, 爱丽丝, 甘雨, 纳西妲, 美少女, 胡桃, 金阁
+[07-01 11:38:31][足社]   新增足社: 0, 新增其他: 0
+[07-01 11:38:31][足社]   图片目录feet_*.jpg: 65
+[07-01 11:38:31][足社] === 完成 ===

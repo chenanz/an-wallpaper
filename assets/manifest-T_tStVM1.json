@@ -1,0 +1,16 @@
+{
+  "name": "安 — 二游少女壁纸馆",
+  "short_name": "安",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0a14",
+  "theme_color": "#0b0a14",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
