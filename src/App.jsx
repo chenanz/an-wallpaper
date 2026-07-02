@@ -235,9 +235,11 @@ function CharacterPage({ images, openViewer, isFav, toggleFavorite, onSubPage })
   );
 }
 
-// ========== 我的（含隐藏玉足社） ==========
+// ========== 我的（含R18隐藏模块） ==========
 function MePage({ images, favorites, toggleFavorite, setViewer }) {
-  const [showYuzu, setShowYuzu] = useState(false);
+  const [showR18, setShowR18] = useState(false);
+  const [pwdInput, setPwdInput] = useState('');
+  const [r18Images, setR18Images] = useState([]);
   const tapRef = useRef(0);
 
   const favWalls = images.filter(wp => favorites.includes(wp.id));
@@ -247,12 +249,29 @@ function MePage({ images, favorites, toggleFavorite, setViewer }) {
     favByChar[wp.characterName].push(wp);
   });
 
-  // 玉足社壁纸筛选
-  const yuzuWalls = images.filter(wp => {
-    if (wp.gender !== '女') return false;
-    const txt = ((wp.tags || []).join(' ') + ' ' + (wp.title || '') + ' ' + (wp.characterName || '')).toLowerCase();
-    return ['足', '脚', '腿', 'foot', 'leg', 'feet', 'stocking', 'pantyhose', '裸足', '丝袜', '玉足', '脚趾', '美腿', '长腿', '黑丝', '白丝', '过膝袜', 'thigh', 'soles', '踝'].some(k => txt.includes(k));
-  });
+  // 加载R18数据（独立存储）
+  useEffect(() => {
+    import('./data_r18.js').then(m => {
+      setR18Images(m.wallpaperDataR18 || []);
+    }).catch(() => setR18Images([]));
+  }, []);
+
+  // R18入口验证
+  const handleR18Tap = () => {
+    tapRef.current++;
+    if (tapRef.current >= 7) {
+      const savedPwd = localStorage.getItem('an_r18_pwd') || '123456';
+      const input = window.prompt('输入访问密码：');
+      if (input === savedPwd) {
+        setShowR18(true);
+        showToast('🔒 已解锁');
+      } else {
+        showToast('密码错误');
+      }
+      tapRef.current = 0;
+    }
+    setTimeout(() => { tapRef.current = 0; }, 3000);
+  };
 
   return (
     <>
@@ -268,42 +287,33 @@ function MePage({ images, favorites, toggleFavorite, setViewer }) {
       </div>
 
       <div className="px-3 py-3">
-        {/* 玉足社隐藏入口：标题「我的」连续点击5次 */}
-        {/* 入口方式：在任何空白处快速连续点击5次 */}
+        {/* R18隐藏入口：连续点击版本号区域7次 */}
         <div
-          className="fixed top-0 left-0 w-16 h-16 z-30 opacity-0"
-          onClick={() => {
-            tapRef.current++;
-            if (tapRef.current >= 5) {
-              setShowYuzu(v => !v);
-              tapRef.current = 0;
-              showToast(showYuzu ? '玉足社已隐藏' : '🌿 玉足社已解锁');
-            }
-            setTimeout(() => { tapRef.current = 0; }, 2000);
-          }}
+          className="fixed top-0 right-0 w-20 h-16 z-30 opacity-0"
+          onClick={handleR18Tap}
         />
 
-        {showYuzu && (
+        {showR18 && (
           <div className="mb-5">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-1.5">
-                <span className="text-sm font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">🌿 玉足社</span>
-                <span className="text-[9px] text-app-muted px-1.5 py-0.5 rounded bg-app-surface border border-app-border">{yuzuWalls.length} 张</span>
+                <span className="text-sm font-bold bg-gradient-to-r from-pink-500 to-red-400 bg-clip-text text-transparent">🔒 隐藏模块</span>
+                <span className="text-[9px] text-app-muted px-1.5 py-0.5 rounded bg-app-surface border border-app-border">{r18Images.length} 张</span>
               </div>
-              <button onClick={() => setShowYuzu(false)} className="text-[10px] text-app-muted border border-app-border px-2 py-0.5 rounded-full">隐藏</button>
+              <button onClick={() => setShowR18(false)} className="text-[10px] text-app-muted border border-app-border px-2 py-0.5 rounded-full">退出</button>
             </div>
-            {yuzuWalls.length > 0 ? (
-              <MasonryGrid items={yuzuWalls} openViewer={setViewer} isFav={() => false} toggleFavorite={() => {}} />
+            {r18Images.length > 0 ? (
+              <MasonryGrid items={r18Images} openViewer={setViewer} isFav={() => false} toggleFavorite={() => {}} />
             ) : (
               <div className="px-3 py-4 rounded-xl bg-app-card border border-app-border text-center">
-                <div className="text-sm text-app-muted">🌿 暂未收录足部壁纸</div>
-                <div className="text-[10px] text-app-muted/60 mt-1">爬虫持续收集中，稍后再来</div>
+                <div className="text-sm text-app-muted">🔒 暂无内容</div>
+                <div className="text-[10px] text-app-muted/60 mt-1">运行爬虫脚本获取 R18 壁纸数据</div>
               </div>
             )}
           </div>
         )}
 
-        {Object.keys(favByChar).length === 0 && !showYuzu ? (
+        {Object.keys(favByChar).length === 0 && !showR18 ? (
           <EmptyState text="还没有收藏任何壁纸" />
         ) : (
           Object.entries(favByChar).map(([charName, list]) => (

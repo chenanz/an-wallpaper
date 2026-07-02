@@ -139,3 +139,16 @@ img {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* ===== R18 预览模糊保护 ===== */
+.blur-r18 {
+  filter: blur(20px);
+  transition: filter 0.3s ease;
+}
+.blur-r18.revealed {
+  filter: blur(0);
+}
+.backdrop-blur-r18 {
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+}

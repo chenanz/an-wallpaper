@@ -22,10 +22,10 @@ DOWNLOAD_DIR = "public/images"
 DATA_JS_PATH = "src/data.js"
 LOG_PATH = "public/images/.crawl_log.txt"
 
-MIN_DELAY = 4.0
-MAX_DELAY = 10.0
-MAX_PER_RUN = 25
-MAX_IMGS_PER_QUERY = 8
+MIN_DELAY = 2.0
+MAX_DELAY = 5.0
+MAX_PER_RUN = 10
+MAX_IMGS_PER_QUERY = 4
 PREFER_PORTRAIT = True
 
 USER_AGENTS = [
@@ -350,7 +350,8 @@ def main():
     if fetched > 0:
         write_data_js(total_items)
         log("📦 data.js 已覆写 + 触发构建")
-        os.system("npm run build")
+        import subprocess
+        subprocess.run(["npm", "run", "build"], shell=True, cwd=os.path.dirname(os.path.abspath(DATA_JS_PATH)), timeout=60)
 
 
 if __name__ == "__main__":
